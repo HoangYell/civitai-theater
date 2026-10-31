@@ -1,6 +1,6 @@
 # Civitai Theater: Fullscreen Media Slideshow (v2.1 Pro)
 
-[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/HoangYell/civitai-theater)
+[![Version](https://img.shields.io/badge/version-2.1.1-blue.svg)](https://github.com/HoangYell/civitai-theater)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
@@ -97,7 +97,7 @@ civitai-theater/
 ├── userscript/
 │   └── civitai-theater.user.js   # Production Userscript (Tampermonkey/Violentmonkey)
 ├── extension/
-│   ├── manifest.json             # Manifest V3 configuration (v2.1.0)
+│   ├── manifest.json             # Manifest V3 configuration (v2.1.1)
 │   ├── content.js                # Extension content script engine
 │   ├── popup.html                # Modern toolbar launcher popup
 │   ├── popup.js                  # Extension message dispatcher

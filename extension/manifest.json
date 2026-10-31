@@ -1,11 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Civitai Theater - Fullscreen Media Slideshow",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Fullscreen cinema slideshow & 4K viewer for Civitai & Decomfy with 3-panel stage, pan-zoom, filmstrip, and prompt inspector.",
   "permissions": [
-    "activeTab",
-    "storage"
+    "activeTab"
   ],
   "host_permissions": [
     "https://civitai.com/*",

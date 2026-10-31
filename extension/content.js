@@ -1,4 +1,4 @@
-// Civitai Theater - Chrome Extension Content Script (v2.1.0 Pro)
+// Civitai Theater - Chrome Extension Content Script (v2.1.1 Pro)
 // Built for Civitai.com and Civitai.red
 
 (function () {

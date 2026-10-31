@@ -130,11 +130,6 @@ Browse Civitai images and videos in an uninterrupted fullscreen slideshow with h
   Required to detect loaded artwork elements on the currently active Civitai browser tab and trigger the fullscreen theater overlay.
   ```
 
-- **`storage`**:
-  ```
-  Used strictly to persist the user's playback preferences locally, such as slide duration, shuffle state, and video audio mute settings.
-  ```
-
 - **Host Permissions (`https://civitai.com/*`, `https://civitai.red/*`, etc.)**:
   ```
   Required to inject the theater player on Civitai domains, upgrade image CDN thumbnail URLs to 2048px/raw resolution, and query public generation parameters from Civitai's API.

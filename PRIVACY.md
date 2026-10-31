@@ -13,7 +13,7 @@ Civitai Theater ("the extension") is an open-source browser extension designed t
 - **No Analytics / Telemetry**: The extension contains zero third-party analytics (no Google Analytics, Sentry, Mixpanel, etc.) and zero external tracking pixels or scripts.
 
 ## How Data Is Stored
-- **Local Storage Only**: The extension uses Chrome's local storage API (`chrome.storage.local`) strictly to remember your user preferences locally on your own machine (such as slideshow speed, volume mute state, and shuffle setting). This data never leaves your device.
+- **Zero Persistent Storage**: The extension does not store or persist any user data or preferences on your disk or in the cloud. Playback state (such as the active slide index and playlist) is held strictly in-memory during your browsing session and resets when the tab is closed.
 
 ## Network & Permissions
 - **Host Permissions**: Civitai Theater only operates on Civitai and Decomfy domains to display the media slideshow player and query public generation parameters directly from the platform's public API. No data is transmitted to any third-party servers.

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Civitai Theater - Fullscreen Media Slideshow & 4K Viewer
 // @namespace    https://hoangyell.com
-// @version      2.1.0
+// @version      2.1.1
 // @description  Fullscreen cinema slideshow & 4K viewer for Civitai & Decomfy with 3-panel stage, pan-zoom, filmstrip, and prompt inspector.
 // @author       Hoang Yell (ya)
 // @match        https://civitai.com/*

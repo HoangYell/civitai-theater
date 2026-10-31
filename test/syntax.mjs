@@ -53,7 +53,9 @@ try {
   assert(manifest.manifest_version === 3, 'manifest_version is 3');
   assert(typeof manifest.name === 'string' && manifest.name.length > 0, 'manifest.name is present');
   assert(manifest.description.length <= 132, `Manifest description length is ${manifest.description.length} (<= 132 chars for Chrome Web Store)`);
-  assert(manifest.version === '2.1.0', `Manifest version is ${manifest.version}`);
+  const pkg = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'));
+  assert(manifest.version === pkg.version, `Manifest version matches package.json (${manifest.version})`);
+  assert(!manifest.permissions.includes('storage'), 'Manifest does not request unused storage permission');
 } catch (e) {
   assert(false, `extension/manifest.json error: ${e.message}`);
 }
