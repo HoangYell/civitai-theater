@@ -9,7 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const isSupported = activeTab.url && (
       activeTab.url.includes('civitai.com') ||
       activeTab.url.includes('civitai.red') ||
-      activeTab.url.includes('decomfy.com')
+      activeTab.url.includes('civitai.blue') ||
+      activeTab.url.includes('civitai.green') ||
+      activeTab.url.includes('decomfy.com') ||
+      activeTab.url.includes('localhost') ||
+      activeTab.url.includes('127.0.0.1')
     );
 
     if (!isSupported) {
@@ -27,7 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       if (response && typeof response.count === 'number') {
-        statusCard.innerHTML = `Found <span class="status-highlight">${response.count}</span> artworks loaded on this page.`;
+        if (response.count === 0) {
+          statusCard.innerHTML = `No artworks visible on screen yet. Scroll down or click below.`;
+        } else {
+          statusCard.innerHTML = `Found <span class="status-highlight">${response.count}</span> artworks loaded on this page.`;
+        }
       }
     });
 

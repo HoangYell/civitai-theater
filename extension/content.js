@@ -866,6 +866,39 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    .ct-lora-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .ct-lora-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--ct-border);
+      border-radius: 9999px;
+      font-size: 11px;
+      color: #e2e8f0;
+      max-width: 100%;
+    }
+    .ct-lora-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    .ct-lora-weight {
+      font-family: var(--ct-mono);
+      font-size: 10px;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
 
     /* Keyboard Shortcuts Modal / Drawer */
     .ct-shortcut-list {
@@ -1019,6 +1052,33 @@
         max-width: 120px;
       }
     }
+
+    /* Floating Glass Toast for Page Actions */
+    #ct-page-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      color: #f8fafc;
+      padding: 10px 18px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      z-index: 2147483647;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #ct-page-toast.ct-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
   `;
 
   // --- Clean-Room Helpers ---
@@ -1027,18 +1087,29 @@
     if (!url.includes('civitai.com')) return url;
 
     try {
-      let result = url;
-      if (mode === 'raw') {
-        result = result.replace(/\/width=\d+[^/]*\//g, '/original=true/');
-        result = result.replace(/\/transcode=[^/]*\//g, '/original=true/');
-      } else {
-        if (result.includes('/width=')) {
-          result = result.replace(/\/width=\d+/g, '/width=2048');
-        } else if (!result.includes('/original=true/')) {
-          result = result.replace(/\/xG1nkqKTMzGDvpLrqFT7WA\/([^/]+)\//, '/xG1nkqKTMzGDvpLrqFT7WA/$1/width=2048/');
+      const uuidRegex = /\/xG1nkqKTMzGDvpLrqFT7WA\/([a-f0-9-]{36})\/([^/]+)\/(.+)$/i;
+      const match = url.match(uuidRegex);
+      if (!match) {
+        if (mode === 'raw') {
+          return url.replace(/\/width=\d+[^/]*\//g, '/original=true/').replace(/\/transcode=[^/]*\//g, '/original=true/');
+        } else {
+          return url.includes('/width=') ? url.replace(/\/width=\d+/g, '/width=2048') : url;
         }
       }
-      return result;
+
+      const [_, uuid, transformSeg, rest] = match;
+      if (mode === 'raw') {
+        return url.replace(uuidRegex, `/xG1nkqKTMzGDvpLrqFT7WA/${uuid}/original=true/${rest}`);
+      } else {
+        if (transformSeg === 'original=true') return url;
+        let newTransform = transformSeg;
+        if (/width=\d+/i.test(newTransform)) {
+          newTransform = newTransform.replace(/width=\d+/i, 'width=2048');
+        } else {
+          newTransform = `width=2048,${newTransform}`;
+        }
+        return url.replace(uuidRegex, `/xG1nkqKTMzGDvpLrqFT7WA/${uuid}/${newTransform}/${rest}`);
+      }
     } catch (_) {
       return url;
     }
@@ -1923,6 +1994,10 @@
         [class*="ImageViewer"] video,
         main img[src*="civitai.com"],
         main video,
+        img[src*="image.civitai.com"],
+        video[src*="image.civitai.com"],
+        img[src*="xG1nkqKTMzGDvpLrqFT7WA"],
+        video[src*="xG1nkqKTMzGDvpLrqFT7WA"],
         .lab-card img,
         .lab-card video,
         .lab-card-media img,
@@ -2173,6 +2248,23 @@
       }
     }
 
+    showPageNotice(message, duration = 3000) {
+      let toast = document.getElementById('ct-page-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'ct-page-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add('ct-visible');
+      clearTimeout(this._pageToastTimer);
+      this._pageToastTimer = setTimeout(() => {
+        toast.classList.remove('ct-visible');
+      }, duration);
+    }
+
     open(startIndex = null) {
       if (this.overlay.classList.contains('ct-active')) return;
 
@@ -2181,7 +2273,7 @@
       }
 
       if (this.items.length === 0) {
-        alert('Civitai Theater: No artworks found on this page yet. Please scroll down to load content.');
+        this.showPageNotice('Civitai Theater: No artworks visible on screen yet. Scroll down to load images.');
         return;
       }
 
@@ -2939,6 +3031,14 @@
           <div class="ct-prompt-box" id="ct-neg-text"></div>
         </div>
 
+        <div class="ct-spec-card" id="ct-card-loras" style="display: none;">
+          <div class="ct-spec-label">
+            <span>LoRAs &amp; Resources</span>
+            <span class="ct-source-tag" id="ct-loras-count" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;"></span>
+          </div>
+          <div class="ct-lora-list" id="ct-loras-list"></div>
+        </div>
+
         <div class="ct-spec-card" id="ct-card-params" style="display: none;">
           <div class="ct-spec-label">Generation Parameters</div>
           <div class="ct-stats-grid" id="ct-params-grid"></div>
@@ -2995,12 +3095,57 @@
         negEl.textContent = negative;
       }
 
+      // Extract LoRAs from meta.resources and prompt tags
+      const loras = [];
+      const seenLoras = new Set();
+      if (Array.isArray(meta.resources)) {
+        meta.resources.forEach(r => {
+          if (r && r.name) {
+            const name = String(r.name).trim();
+            if (!seenLoras.has(name.toLowerCase())) {
+              seenLoras.add(name.toLowerCase());
+              const w = r.weight != null ? String(r.weight) : (r.strength != null ? String(r.strength) : '1.0');
+              loras.push({ name, weight: w });
+            }
+          }
+        });
+      }
+      const promptStr = meta.prompt ? String(meta.prompt) : '';
+      const loraRegex = /<\s*lora\s*:\s*([^:>]+)(?::\s*([^>]+))?\s*>/gi;
+      let lMatch;
+      while ((lMatch = loraRegex.exec(promptStr)) !== null) {
+        const name = lMatch[1].trim();
+        if (!seenLoras.has(name.toLowerCase())) {
+          seenLoras.add(name.toLowerCase());
+          loras.push({ name, weight: lMatch[2] ? lMatch[2].trim() : '1.0' });
+        }
+      }
+
+      const loraCard = root.querySelector('#ct-card-loras');
+      const loraList = root.querySelector('#ct-loras-list');
+      const loraCount = root.querySelector('#ct-loras-count');
+      if (loraCard && loraList) {
+        loraCard.style.display = loras.length ? 'block' : 'none';
+        if (loraCount) loraCount.textContent = loras.length ? `${loras.length} LORAS` : '';
+        loraList.innerHTML = loras.map(l => `
+          <div class="ct-lora-pill" title="Weight: ${escapeHtml(l.weight)}">
+            <span class="ct-lora-name">${escapeHtml(l.name)}</span>
+            <span class="ct-lora-weight">${escapeHtml(l.weight)}</span>
+          </div>
+        `).join('');
+      }
+
       const stats = [];
       if (item.baseModel) stats.push(['Base Model', item.baseModel]);
       if (meta.Model) stats.push(['Checkpoint', meta.Model]);
+      const res = meta.Size || (meta.width && meta.height ? `${meta.width}x${meta.height}` : '');
+      if (res) stats.push(['Resolution', res]);
       if (meta.steps != null) stats.push(['Steps', meta.steps]);
-      if (meta.cfgScale != null) stats.push(['CFG Scale', meta.cfgScale]);
+      const cfg = meta.cfgScale ?? meta['CFG scale'] ?? meta.cfg_scale;
+      if (cfg != null) stats.push(['CFG Scale', cfg]);
       if (meta.sampler) stats.push(['Sampler', meta.sampler]);
+      const clip = meta.clipSkip ?? meta['Clip skip'];
+      if (clip != null) stats.push(['Clip Skip', clip]);
       if (meta.seed != null) stats.push(['Seed', meta.seed]);
 
       const paramsCard = root.querySelector('#ct-card-params');
