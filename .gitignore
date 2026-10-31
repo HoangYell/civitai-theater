@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+test/screenshots/
+*.log
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.agent/
+.brain/

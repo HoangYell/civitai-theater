@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Civitai Theater - Fullscreen Media Slideshow",
+  "version": "2.1.0",
+  "description": "Fullscreen cinema slideshow & 4K viewer for Civitai & Decomfy with 3-panel stage, pan-zoom, filmstrip, and prompt inspector.",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://civitai.com/*",
+    "https://civitai.red/*",
+    "https://civitai.blue/*",
+    "https://*.civitai.com/*",
+    "https://decomfy.com/*",
+    "https://*.decomfy.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://civitai.com/*",
+        "https://civitai.red/*",
+        "https://civitai.blue/*",
+        "https://*.civitai.com/*",
+        "https://decomfy.com/*",
+        "https://*.decomfy.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

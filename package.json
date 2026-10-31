@@ -1,0 +1,46 @@
+{
+  "name": "civitai-theater",
+  "version": "2.1.0",
+  "description": "Fullscreen cinema slideshow & 4K viewer for Civitai & Decomfy with 3-panel stage, pan-zoom, filmstrip, and prompt inspector.",
+  "type": "module",
+  "main": "dist/civitai-theater.user.js",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node test/syntax.mjs",
+    "test:visual": "node test/verify.mjs",
+    "test:audit": "node test/audit.mjs",
+    "test:mobile": "node test/audit_mobile.mjs",
+    "assets:render": "node scripts/render-store-assets.mjs",
+    "publish:cws": "node scripts/publish-cws.mjs"
+  },
+  "keywords": [
+    "civitai",
+    "civitai-extension",
+    "civitai-viewer",
+    "slideshow",
+    "image-viewer",
+    "fullscreen-viewer",
+    "comfyui",
+    "stable-diffusion",
+    "flux",
+    "sdxl",
+    "prompt-inspector",
+    "ai-art",
+    "userscript",
+    "chrome-extension",
+    "tampermonkey",
+    "bookmarklet",
+    "visionos",
+    "decomfy"
+  ],
+  "author": "Hoang Yell <hoangyell@gmail.com> (https://hoangyell.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HoangYell/civitai-theater.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HoangYell/civitai-theater/issues"
+  },
+  "homepage": "https://github.com/HoangYell/civitai-theater#readme"
+}

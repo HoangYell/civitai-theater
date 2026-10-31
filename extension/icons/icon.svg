@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="ct-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="ct-accent-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#ct-grad)"/>
+  <rect x="2" y="2" width="124" height="124" rx="26" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+  
+  <!-- Film Strip Border Accent -->
+  <rect x="22" y="24" width="84" height="80" rx="14" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="4"/>
+  <circle cx="34" cy="36" r="3" fill="#38bdf8"/>
+  <circle cx="34" cy="50" r="3" fill="#38bdf8"/>
+  <circle cx="34" cy="64" r="3" fill="#38bdf8"/>
+  <circle cx="34" cy="78" r="3" fill="#38bdf8"/>
+  <circle cx="34" cy="92" r="3" fill="#38bdf8"/>
+  
+  <circle cx="94" cy="36" r="3" fill="#38bdf8"/>
+  <circle cx="94" cy="50" r="3" fill="#38bdf8"/>
+  <circle cx="94" cy="64" r="3" fill="#38bdf8"/>
+  <circle cx="94" cy="78" r="3" fill="#38bdf8"/>
+  <circle cx="94" cy="92" r="3" fill="#38bdf8"/>
+
+  <!-- Play Symbol -->
+  <polygon points="56,48 80,64 56,80" fill="url(#ct-accent-grad)"/>
+</svg>
