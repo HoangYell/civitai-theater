@@ -1,5 +1,6 @@
 # Civitai Theater: Fullscreen Media Slideshow (v2.1 Pro)
 
+[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Civitai_Theater-4285F4?style=flat&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/civitai-theater-fullscree/ccfibckanaokflmicjfginfkadhgcnif?pli=1)
 [![Version](https://img.shields.io/badge/version-2.1.1-blue.svg)](https://github.com/HoangYell/civitai-theater)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
@@ -32,7 +33,19 @@ A high-definition, cinema-grade fullscreen media player and slideshow experience
 
 ## 🚀 Installation & Delivery Formats
 
-### Option 1: Userscript (Tampermonkey / Violentmonkey)
+### 🌟 Option 1: Official Chrome Web Store Extension (Recommended)
+
+Install directly from the official **Google Chrome Web Store** (auto-updates, zero developer setup, 100% verified):
+
+👉 **[Install Civitai Theater from Chrome Web Store](https://chromewebstore.google.com/detail/civitai-theater-fullscree/ccfibckanaokflmicjfginfkadhgcnif?pli=1)**
+
+- 1-click install with automated background updates
+- Zero configuration required
+- Compatible with Chrome, Brave, Arc, Microsoft Edge, Opera, and all Chromium browsers
+
+---
+
+### Option 2: Userscript (Tampermonkey / Violentmonkey)
 
 1. Install **Tampermonkey** or **Violentmonkey** in your browser (Chrome, Firefox, Edge, Brave, Arc, Safari/Orion).
 2. Install the userscript directly from GitHub or local file:
@@ -42,7 +55,7 @@ A high-definition, cinema-grade fullscreen media player and slideshow experience
 
 ---
 
-### Option 2: 1-Click Browser Bookmarklet (Zero Extensions Required)
+### Option 3: 1-Click Browser Bookmarklet (Zero Extensions Required)
 
 Works in any desktop or mobile browser without installing extensions:
 

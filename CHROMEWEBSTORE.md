@@ -1,7 +1,8 @@
 # Chrome Web Store Listing — Civitai Theater
 
-> **Current Status**: `Pending review`  
+> **Current Status**: `Published & Live`  
 > **Item ID**: `ccfibckanaokflmicjfginfkadhgcnif`  
+> **Store URL**: `https://chromewebstore.google.com/detail/civitai-theater-fullscree/ccfibckanaokflmicjfginfkadhgcnif?pli=1`  
 > **Version**: `2.1.1`  
 > **Last Updated**: 2026-11-01
 
