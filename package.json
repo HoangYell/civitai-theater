@@ -1,6 +1,6 @@
 {
   "name": "civitai-theater",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Fullscreen cinema slideshow & 4K viewer for Civitai & Decomfy with 3-panel stage, pan-zoom, filmstrip, and prompt inspector.",
   "type": "module",
   "main": "dist/civitai-theater.user.js",

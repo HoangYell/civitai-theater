@@ -1,4 +1,4 @@
-# Chrome Web Store Listing Submission Kit (v2.1 Pro)
+# Chrome Web Store Listing Submission Kit (v2.2 Pro)
 
 Ready-to-copy fields and answers for submitting **Civitai Theater** to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole).
 
@@ -22,9 +22,9 @@ Civitai Theater: Fullscreen Media Slideshow
 
 ### Summary / Short Description (Max 132 chars)
 ```
-Fullscreen cinema slideshow & 4K viewer for Civitai & Decomfy with 3-panel stage, pan-zoom, filmstrip, and prompt inspector.
+Fullscreen cinema slideshow & 4K viewer for Civitai with 3-panel stage, pan-zoom, filmstrip, specs, and 1-click Decomfy sharing.
 ```
-*(Character count: 124 / 132)*
+*(Character count: 129 / 132)*
 
 ### Category
 ```
@@ -34,17 +34,18 @@ Photos
 
 ### Detailed Description
 ```markdown
-Civitai Theater transforms the scattered masonry feeds of Civitai and Decomfy into an ultra-smooth, cinema-grade 4K fullscreen slideshow. Browse community artworks, model showcases, and videos without tedious clicking, enjoy uncompressed 2048px/4K resolution upscaling, zoom into intricate generation details, copy positive/negative prompts, and decompile ComfyUI workflows in 1 click.
+Civitai Theater transforms the scattered masonry feeds of Civitai and Decomfy into an ultra-smooth, cinema-grade 4K fullscreen slideshow. Browse community artworks, model showcases, and videos without tedious clicking, enjoy uncompressed 2048px/4K resolution upscaling, zoom into intricate generation details, copy positive/negative prompts, inspect AutoV2 LoRA weights, and share any showcase instantly via Decomfy in 1 click.
 
 Whether you are exploring trending Stable Diffusion XL, Flux.1, SD 1.5, or Pony creations, Civitai Theater provides the ultimate distraction-free presentation.
 
 KEY CAPABILITIES:
 
 - 3-Panel Widescreen Cinema Stage: When viewing portrait artworks on desktop displays (>=1024px), dynamic Before and After flanking cards fill side negative space with preceding and subsequent creations. Click either flank to step through the collection with continuous context.
+- 1-Click Universal Sharing via Decomfy (Shift + C): Instantly generate a shareable web slideshow link for any Civitai creation or post album. Friends and community members without the extension can open the link directly on decomfy.com/theater and watch the complete fullscreen slideshow with zero installation required.
 - Zero-Empty Preloader & Memory Cache: Bidirectional caching (+3/-2 slides) with an LRU memory cache and instant thumbnail preview fallback eliminate empty blank loading screens during network fetches.
 - True 4K & Uncompressed Resolution Elevation: Automatically strips Civitai CDN downscale constraints (/width=450/, /width=800/) and upgrades media URLs to crisp 2048px high-DPI or raw uncompressed quality.
 - Interactive Pan & Zoom (1x to 4x): Double-click or mouse-wheel zoom into intricate details, anime line art, and textures. Click and drag to pan smoothly across the canvas.
-- Generation Specs & Prompt Telemetry (I Key): Xcode-inspired dark side drawer displaying positive prompt, negative prompt, checkpoint model, steps, sampler, seed, and CFG scale with 1-click token copy buttons.
+- Generation Specs & Prompt Telemetry (I Key): Xcode-inspired dark side drawer displaying positive prompt, negative prompt, checkpoint model, steps, sampler, seed, CFG scale, and AutoV2 LoRA weights with 1-click token copy buttons.
 - 1-Click ComfyUI Decompilation (Decomfy.com): Directly inspect and decompile embedded PNG workflows on Decomfy Lab. Extract node DAG execution graphs and resolve missing custom node packages with 1 click.
 - VisionOS Floating Glass Dock: Minimalist pill dock with glassmorphism blur and dual-layer ambient lighting diffusing artwork colors into the background.
 - Collapsible Filmstrip Scrubber (T Key): Interactive thumbnail carousel to jump to any slide instantly or preview upcoming creations.
@@ -57,6 +58,7 @@ KEY CAPABILITIES:
 PRO KEYBOARD & TOUCH HOTKEYS:
 
 - Alt + S: Launch Civitai Theater from any Civitai or Decomfy page
+- Shift + C: Share current Civitai artwork or album via Decomfy (copies instant web link to clipboard)
 - Space: Play / Pause slideshow
 - Right Arrow / J / Enter: Next Slide
 - Left Arrow / K: Previous Slide
@@ -78,6 +80,9 @@ FREQUENTLY ASKED QUESTIONS:
 
 Q: How do I launch Civitai Theater?
 A: Simply click the floating "Theater" pill at the bottom-right corner of any Civitai or Decomfy page, click the extension toolbar icon, or press Alt + S on your keyboard.
+
+Q: How does the Share via Decomfy feature work?
+A: Press Shift + C or click "Share via Decomfy" on any slide. The extension copies a link formatted as `https://decomfy.com/theater?url=<civitai_url>`. Anyone you share this link with can open it in any desktop or mobile browser to watch the full album slideshow with zero extensions installed.
 
 Q: Does it work with adult or NSFW content?
 A: Yes. Civitai Theater respects your personal Civitai account display settings. Whatever images or videos are loaded in your current session will appear in the slideshow.
@@ -103,10 +108,12 @@ All required graphics are pre-rendered to Google Chrome Web Store pixel-perfect 
 
 1. **Store Icon (128x128 PNG)**:
    - `store-assets/icon_128x128.png`
-2. **Store Screenshots (Mandatory 1280x800 PNG)**:
-   - `store-assets/screenshot_1_theater_1280x800.png` (Fullscreen Theater Slide with Filmstrip & Dock)
-   - `store-assets/screenshot_2_specs_1280x800.png` (Generation Specs & Prompt Telemetry Drawer)
-   - `store-assets/screenshot_3_feed_1280x800.png` (Civitai Feed with Floating Launcher Pill)
+2. **Store Screenshots (5 Mandatory 1280x800 PNGs)**:
+   - `store-assets/screenshot_1_theater_1280x800.png` (3-Panel Widescreen Cinema Slideshow with Before/After Flanks & 4K UHD)
+   - `store-assets/screenshot_2_share_decomfy_1280x800.png` (1-Click Universal Sharing via Decomfy - Shift + C)
+   - `store-assets/screenshot_3_specs_1280x800.png` (Full Generation Specs, Prompt Telemetry & AutoV2 LoRA Weights)
+   - `store-assets/screenshot_4_filmstrip_zoom_1280x800.png` (Interactive 4x Pan-Zoom & Filmstrip Scrubber)
+   - `store-assets/screenshot_5_feed_popup_1280x800.png` (Instant Extension Toolbar Popup & Infinite Feed Scanner)
 3. **Small Promo Tile (440x280 PNG)**:
    - `store-assets/promo_tile_440x280.png`
 4. **Marquee Banner (1400x560 PNG)**:

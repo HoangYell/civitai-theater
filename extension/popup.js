@@ -44,5 +44,33 @@ document.addEventListener('DOMContentLoaded', () => {
         window.close();
       });
     });
+
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        chrome.tabs.sendMessage(activeTab.id, { action: 'GET_SHARE_URL' }, (res) => {
+          let shareUrl = '';
+          if (res && res.url) {
+            shareUrl = res.url;
+          } else {
+            const rawUrl = activeTab.url || 'https://civitai.com';
+            shareUrl = `https://decomfy.com/theater?url=${encodeURIComponent(rawUrl)}`;
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+              statusCard.innerHTML = `<span style="color: #38bdf8; font-weight: 600;">✔ Decomfy link copied!</span> Anyone can view this slideshow.`;
+              setTimeout(() => window.close(), 1200);
+            }).catch(() => {
+              window.open(shareUrl, '_blank');
+              window.close();
+            });
+          } else {
+            window.open(shareUrl, '_blank');
+            window.close();
+          }
+        });
+      });
+    }
   });
 });

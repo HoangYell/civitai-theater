@@ -21,7 +21,7 @@ const scriptBody = bodyMatch ? bodyMatch[1].trim() : userScriptCode;
 
 // 3. Update extension/content.js
 const extensionContentPath = path.join(rootDir, 'extension/content.js');
-const extensionHeader = `// Civitai Theater - Chrome Extension Content Script (v2.1.1 Pro)\n// Built for Civitai.com and Civitai.red\n\n`;
+const extensionHeader = `// Civitai Theater - Chrome Extension Content Script (v2.2.0 Pro)\n// Built for Civitai.com and Civitai.red\n\n`;
 fs.writeFileSync(extensionContentPath, extensionHeader + scriptBody);
 
 // 4. Build bookmarklet payload.

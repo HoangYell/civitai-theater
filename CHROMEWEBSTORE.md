@@ -3,8 +3,8 @@
 > **Current Status**: `Published & Live`  
 > **Item ID**: `ccfibckanaokflmicjfginfkadhgcnif`  
 > **Store URL**: `https://chromewebstore.google.com/detail/civitai-theater-fullscree/ccfibckanaokflmicjfginfkadhgcnif?pli=1`  
-> **Version**: `2.1.1`  
-> **Last Updated**: 2026-11-01
+> **Version**: `2.2.0`  
+> **Last Updated**: 2026-11-02
 
 ---
 
@@ -37,6 +37,7 @@ KEY CAPABILITIES:
 - Infinite Feed Auto-Harvesting: Automatically scrolls and loads subsequent feed batches so your slideshow never stops.
 - Strict Artwork Filtering: Automatically purges junk badges, avatars, reactions, and decorative flairs to focus 100% on genuine creations.
 - Live Generation Specs Inspector (I Key): Xcode-inspired dark side drawer displaying positive prompt, negative prompt, checkpoint model, steps, sampler, seed, and CFG scale with 1-click token copy buttons.
+- 1-Click Universal Decomfy Sharing (Shift + C): Instantly share any Civitai artwork, post album, model version, or creator feed as a clean Decomfy theater link (decomfy.com/theater?url=...) for anyone to watch in luxury fullscreen.
 - 100% Vector Iconography: Pure Lucide SVG vector icons throughout. Zero raw emojis or pixelated glyphs.
 
 KEYBOARD SHORTCUTS:
@@ -45,6 +46,9 @@ KEYBOARD SHORTCUTS:
 - Space: Play / Pause
 - Right Arrow / J / Enter: Next Slide
 - Left Arrow / K: Previous Slide
+- Shift + C: Copy Decomfy Theater Slideshow Share Link
+- C: Copy Civitai Image Link
+- P: Copy Positive Generation Prompt
 - T: Toggle Bottom Filmstrip Scrubber
 - I: Toggle Generation Specs & Telemetry Drawer
 - H: Toggle Zen Mode (Hide all HUD overlays)
@@ -67,10 +71,12 @@ Civitai Theater is 100% client-side and open-source. It does NOT collect, track,
 ## Graphic Assets
 
 1. **Store Icon (128x128 PNG)**: `store-assets/icon_128x128.png`
-2. **Screenshots (1280x800 PNG)**:
-   - `store-assets/screenshot_1_theater_1280x800.png`
-   - `store-assets/screenshot_2_specs_1280x800.png`
-   - `store-assets/screenshot_3_feed_1280x800.png`
+2. **Screenshots (5 Mandatory 1280x800 PNGs)**:
+   - `store-assets/screenshot_1_theater_1280x800.png` (3-Panel Widescreen Cinema Slideshow with Before/After Flanks & 4K UHD)
+   - `store-assets/screenshot_2_share_decomfy_1280x800.png` (1-Click Universal Sharing via Decomfy - Shift + C)
+   - `store-assets/screenshot_3_specs_1280x800.png` (Full Generation Specs, Prompt Telemetry & AutoV2 LoRA Weights)
+   - `store-assets/screenshot_4_filmstrip_zoom_1280x800.png` (Interactive 4x Pan-Zoom & Filmstrip Scrubber)
+   - `store-assets/screenshot_5_feed_popup_1280x800.png` (Instant Extension Toolbar Popup & Infinite Feed Scanner)
 3. **Small Promo Tile (440x280 PNG)**: `store-assets/promo_tile_440x280.png`
 4. **Marquee Promo Banner (1400x560 PNG)**: `store-assets/marquee_tile_1400x560.png`
 

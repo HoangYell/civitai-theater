@@ -1,7 +1,7 @@
-# Civitai Theater: Fullscreen Media Slideshow (v2.1 Pro)
+# Civitai Theater: Fullscreen Media Slideshow (v2.2 Pro)
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Civitai_Theater-4285F4?style=flat&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/civitai-theater-fullscree/ccfibckanaokflmicjfginfkadhgcnif?pli=1)
-[![Version](https://img.shields.io/badge/version-2.1.1-blue.svg)](https://github.com/HoangYell/civitai-theater)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](https://github.com/HoangYell/civitai-theater)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
@@ -27,6 +27,7 @@ A high-definition, cinema-grade fullscreen media player and slideshow experience
 - **Live Generation Specs & Telemetry (`I` Key)**: Xcode-inspired dark side drawer displaying positive prompt, negative prompt, checkpoint model, steps, sampler, seed, and CFG scale with 1-click token copy buttons.
 - **Infinite Feed Auto-Harvesting**: Observes the page with a debounced `MutationObserver`. As you approach the end of loaded items, it triggers background viewport scrolling so your slideshow never ends.
 - **1-Click ComfyUI Decompilation ([Decomfy.com](https://decomfy.com))**: Integrated with Decomfy Lab. Jump straight from any artwork or prompt into Decomfy's missing node auto-resolver and visual execution DAG.
+- **Universal Decomfy Slideshow Sharing (`Shift + C`)**: Generate and copy direct Decomfy Theater links (`https://decomfy.com/theater?url=...`). Anyone clicking the link can instantly experience the fullscreen slideshow from any Civitai artwork, post album, model version, or creator feed via Decomfy with zero extensions installed.
 - **100% Vector Iconography**: Pure Lucide SVG vector icons throughout. Zero raw emojis or pixelated glyphs.
 
 ---
@@ -96,6 +97,9 @@ A native browser extension package is ready for developer loading and Chrome Web
 | `S` | Toggle Shuffle (Randomized Order) |
 | `M` | Toggle Video Sound Mute / Unmute |
 | `D` | Download Current Media in Highest Resolution |
+| `Shift + C` | Copy Decomfy Theater Slideshow Share Link |
+| `C` | Copy Direct Civitai Image Link |
+| `P` | Copy Positive Generation Prompt |
 | `O` or `V` | Open Original Civitai Post / Image in New Tab |
 | `1` to `5` | Speed Presets (3s, 5s, 8s, 12s, Manual) |
 | `Escape` | Reset Zoom / Close Drawers / Exit Theater Mode |
