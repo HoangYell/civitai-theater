@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Civitai Theater - Fullscreen Media Slideshow & 4K Viewer
 // @namespace    https://hoangyell.com
-// @version      2.1.1
+// @version      2.2.0
 // @description  Fullscreen cinema slideshow & 4K viewer for Civitai & Decomfy with 3-panel stage, pan-zoom, filmstrip, and prompt inspector.
 // @author       Hoang Yell (ya)
 // @match        https://civitai.com/*
@@ -42,6 +42,7 @@
     filmstrip: `<svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>`,
     zoomIn: `<svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>`,
     eye: `<svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`,
+    share: `<svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
     loader: `<svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`
   };
 
@@ -1193,7 +1194,22 @@
     checkAutoOpen() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('theater') === '1' || window.location.hash === '#theater') {
+        const theaterParam = urlParams.get('theater') || urlParams.get('url') || urlParams.get('civitai');
+        const slugParam = urlParams.get('slug');
+
+        if (slugParam) {
+          setTimeout(() => this.openBySlug(slugParam), 200);
+          return;
+        }
+
+        if (theaterParam) {
+          if (theaterParam.startsWith('http') || theaterParam.includes('civitai') || /^\d+$/.test(theaterParam)) {
+            setTimeout(() => this.loadCivitaiUrl(theaterParam), 150);
+            return;
+          }
+        }
+
+        if (theaterParam === '1' || window.location.hash === '#theater') {
           const attempt = (retries = 12) => {
             this.scanPageMedia();
             if (this.items.length > 0) {
@@ -1215,6 +1231,12 @@
             sendRes({ status: 'ok', count: this.items.length });
           } else if (req.action === 'GET_COUNT') {
             sendRes({ count: this.items.length });
+          } else if (req.action === 'LOAD_CIVITAI_URL') {
+            this.loadCivitaiUrl(req.url).then(ok => sendRes({ status: ok ? 'ok' : 'error' }));
+            return true;
+          } else if (req.action === 'GET_SHARE_URL') {
+            const url = this.getDecomfyShareUrl();
+            sendRes({ status: 'ok', url });
           }
         });
       }
@@ -1277,6 +1299,9 @@
               </button>
               <button class="ct-dock-btn" id="ct-btn-download" title="Download High-Res (D)">
                 ${ICONS.download}
+              </button>
+              <button class="ct-dock-btn" id="ct-btn-share-decomfy" title="Share Slideshow via Decomfy (Shift+C)" aria-label="Share via Decomfy">
+                ${ICONS.share}
               </button>
               <button class="ct-dock-btn" id="ct-btn-ext" title="Open Image on Civitai (O)">
                 ${ICONS.externalLink}
@@ -1472,6 +1497,8 @@
       this.overlay.querySelector('#ct-btn-close-inspector').addEventListener('click', () => this.toggleInspector(false));
       this.overlay.querySelector('#ct-btn-fs').addEventListener('click', () => this.toggleFullscreen());
       this.overlay.querySelector('#ct-btn-download').addEventListener('click', () => this.downloadCurrent());
+      const shareBtn = this.overlay.querySelector('#ct-btn-share-decomfy');
+      if (shareBtn) shareBtn.addEventListener('click', () => this.shareViaDecomfy());
       this.overlay.querySelector('#ct-btn-ext').addEventListener('click', () => this.openExternal());
 
       // Inspector Tabs
@@ -1772,6 +1799,41 @@
       }
     }
 
+    getDecomfyShareUrl(item = null) {
+      const currentItem = item || (this.items && this.items[this.currentIndex]);
+      if (currentItem && currentItem.decomfySlug) {
+        return `https://decomfy.com/theater?slug=${encodeURIComponent(currentItem.decomfySlug)}`;
+      }
+      let civUrl = '';
+      if (currentItem && currentItem.civitaiUrl) {
+        civUrl = currentItem.civitaiUrl;
+      } else if (currentItem && currentItem.imageId) {
+        civUrl = `https://civitai.com/images/${encodeURIComponent(currentItem.imageId)}`;
+      } else if (currentItem && currentItem.postId) {
+        civUrl = `https://civitai.com/posts/${encodeURIComponent(currentItem.postId)}`;
+      } else if (typeof window !== 'undefined' && window.location) {
+        const href = window.location.href;
+        if (href.includes('civitai.com') || href.includes('civitai.red')) {
+          civUrl = href;
+        }
+      }
+      if (civUrl) {
+        return `https://decomfy.com/theater?url=${encodeURIComponent(civUrl)}`;
+      }
+      return 'https://decomfy.com/theater';
+    }
+
+    shareViaDecomfy() {
+      const item = this.items[this.currentIndex];
+      const shareUrl = this.getDecomfyShareUrl(item);
+      this.copyTextToClipboard(shareUrl).then((ok) => {
+        if (ok) {
+          this.showZoomHud('DECOMFY LINK COPIED');
+          this.showPageNotice('Decomfy slideshow link copied to clipboard!');
+        }
+      });
+    }
+
     copyCurrentPrompt() {
       const item = this.items[this.currentIndex];
       if (!item) return;
@@ -1936,7 +1998,11 @@
         case 'c':
         case 'C':
           e.preventDefault();
-          this.copyCivitaiLink();
+          if (e.shiftKey || e.altKey) {
+            this.shareViaDecomfy();
+          } else {
+            this.copyCivitaiLink();
+          }
           break;
         case 'p':
         case 'P':
@@ -2328,6 +2394,148 @@
         }
       } else {
         this.open(idx >= 0 ? idx : 0);
+      }
+    }
+
+    async loadCivitaiUrl(rawInput, options = {}) {
+      if (!rawInput || typeof rawInput !== 'string') return false;
+      const trimmed = rawInput.trim();
+      if (!trimmed) return false;
+
+      this.showPageNotice('Loading Civitai slideshow...');
+      const loader = this.overlay.querySelector('#ct-stage-loader');
+      if (loader) loader.style.opacity = '1';
+
+      try {
+        let apiUrl = '';
+        let targetImageId = null;
+        let targetPostId = null;
+
+        // 1. Detect Image: /images/12345 or plain number
+        const imgMatch = trimmed.match(/\/images\/(\d+)/i) || (trimmed.match(/^\d+$/) ? [null, trimmed] : null);
+        if (imgMatch) {
+          targetImageId = imgMatch[1];
+          apiUrl = `https://civitai.com/api/v1/images?imageId=${encodeURIComponent(targetImageId)}&nsfw=X`;
+        }
+
+        // 2. Detect Post: /posts/12345
+        const postMatch = trimmed.match(/\/posts\/(\d+)/i);
+        if (postMatch) {
+          targetPostId = postMatch[1];
+          apiUrl = `https://civitai.com/api/v1/images?postId=${encodeURIComponent(targetPostId)}&nsfw=X`;
+        }
+
+        // 3. Detect Model: /models/12345 or modelVersionId
+        const modelMatch = trimmed.match(/\/models\/(\d+)/i);
+        const versionMatch = trimmed.match(/[?&]modelVersionId=(\d+)/i);
+        if (versionMatch) {
+          apiUrl = `https://civitai.com/api/v1/images?modelVersionId=${encodeURIComponent(versionMatch[1])}&limit=50&nsfw=X`;
+        } else if (modelMatch && !apiUrl) {
+          try {
+            const mRes = await fetch(`https://civitai.com/api/v1/models/${encodeURIComponent(modelMatch[1])}`);
+            if (mRes.ok) {
+              const mData = await mRes.json();
+              const vId = mData.modelVersions && mData.modelVersions[0] && mData.modelVersions[0].id;
+              if (vId) {
+                apiUrl = `https://civitai.com/api/v1/images?modelVersionId=${encodeURIComponent(vId)}&limit=50&nsfw=X`;
+              }
+            }
+          } catch (_) {}
+        }
+
+        // 4. Detect User: /user/username
+        const userMatch = trimmed.match(/\/user\/([a-zA-Z0-9_\-]+)/i);
+        if (userMatch && !apiUrl) {
+          apiUrl = `https://civitai.com/api/v1/images?username=${encodeURIComponent(userMatch[1])}&limit=50&nsfw=X`;
+        }
+
+        // 5. Default fallback to general images feed
+        if (!apiUrl) {
+          apiUrl = 'https://civitai.com/api/v1/images?limit=50&nsfw=X';
+        }
+
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error(`Civitai API status ${res.status}`);
+        const data = await res.json();
+        let rawItems = Array.isArray(data.items) ? data.items : [];
+
+        // If single image and it belongs to a post album, fetch entire post for full slideshow
+        if (targetImageId && rawItems.length > 0 && rawItems[0].postId) {
+          try {
+            const albumRes = await fetch(`https://civitai.com/api/v1/images?postId=${encodeURIComponent(rawItems[0].postId)}&nsfw=X`);
+            if (albumRes.ok) {
+              const albumData = await albumRes.json();
+              if (Array.isArray(albumData.items) && albumData.items.length > 1) {
+                rawItems = albumData.items;
+              }
+            }
+          } catch (_) {}
+        }
+
+        if (rawItems.length === 0) {
+          this.showPageNotice('No artworks found for this Civitai link.');
+          return false;
+        }
+
+        const parsedItems = rawItems.map((img) => {
+          const natW = img.width || 0;
+          const natH = img.height || 0;
+          const isPortrait = natH > natW;
+          const isVideo = img.type === 'video' || Boolean(img.url && /\.(mp4|webm)$/i.test(img.url));
+          const hdUrl = sanitizeMediaUrl(upgradeCivitaiUrl(img.url, 'hd'));
+          const rawUrl = sanitizeMediaUrl(img.url);
+          const thumb = sanitizeMediaUrl(upgradeCivitaiUrl(img.url, 'thumb'));
+          const metaObj = img.meta && typeof img.meta === 'object' ? img.meta : null;
+
+          return {
+            id: `img_${img.id}`,
+            imageId: String(img.id),
+            postId: img.postId ? String(img.postId) : '',
+            civitaiUrl: `https://civitai.com/images/${encodeURIComponent(img.id)}`,
+            username: img.username || 'Civitai Creator',
+            decomfySlug: null,
+            type: isVideo ? 'video' : 'image',
+            url: hdUrl,
+            rawUrl: rawUrl,
+            thumbnail: thumb,
+            poster: thumb,
+            width: natW,
+            height: natH,
+            isPortrait: isPortrait,
+            meta: metaObj,
+            baseModel: img.baseModel || (metaObj && metaObj.Model) || '',
+            metaLoaded: Boolean(metaObj)
+          };
+        });
+
+        let startIndex = 0;
+        if (targetImageId) {
+          const foundIdx = parsedItems.findIndex((it) => it.imageId === String(targetImageId));
+          if (foundIdx >= 0) startIndex = foundIdx;
+        }
+
+        this.loadExternalItems(parsedItems, startIndex);
+        return true;
+      } catch (err) {
+        this.showPageNotice(`Failed to load Civitai link: ${err.message || 'Network error'}`);
+        return false;
+      } finally {
+        if (loader) loader.style.opacity = '0';
+      }
+    }
+
+    loadExternalItems(items, startIndex = 0) {
+      if (!Array.isArray(items) || items.length === 0) return;
+      this.items = items;
+      this.seenIds.clear();
+      items.forEach((it) => this.seenIds.add(it.id));
+      this.currentIndex = (startIndex >= 0 && startIndex < items.length) ? startIndex : 0;
+      this.updateFilmstrip();
+      this.updateCounter();
+      if (!this.overlay.classList.contains('ct-active')) {
+        this.open(this.currentIndex);
+      } else {
+        this.renderCurrentSlide();
       }
     }
 
@@ -2969,6 +3177,7 @@
             <div class="ct-key-row"><span class="ct-key-label">Open Civitai Post</span><span class="ct-kbd">O / V</span></div>
             <div class="ct-key-row"><span class="ct-key-label">Remix on Civitai</span><span class="ct-kbd">R</span></div>
             <div class="ct-key-row"><span class="ct-key-label">Copy Civitai link</span><span class="ct-kbd">C</span></div>
+            <div class="ct-key-row"><span class="ct-key-label">Share via Decomfy</span><span class="ct-kbd">Shift + C</span></div>
             <div class="ct-key-row"><span class="ct-key-label">Copy prompt</span><span class="ct-kbd">P</span></div>
             <div class="ct-key-row"><span class="ct-key-label">Mobile Gestures</span><span class="ct-kbd">Swipe / Pinch</span></div>
             <div class="ct-key-row"><span class="ct-key-label">Speed 3s / 5s / 8s</span><span class="ct-kbd">1 / 2 / 3</span></div>
@@ -3066,10 +3275,16 @@
           <div style="font-size: 12px; color: var(--ct-text-dim); margin-bottom: 10px; line-height: 1.4;">
             Decompile embedded PNG workflows, extract node DAGs, and resolve missing custom nodes on Decomfy Lab.
           </div>
-          <a href="${item.decomfySlug ? `https://decomfy.com/${encodeURIComponent(item.decomfySlug)}/` : (item.imageId ? `https://decomfy.com/resolve/?civitai=${encodeURIComponent(item.imageId)}` : 'https://decomfy.com/resolve/')}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 8px 12px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; color: #38bdf8; font-size: 12px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;">
-            ${ICONS.externalLink}
-            <span>${item.decomfySlug ? 'View Recipe on Decomfy.com' : 'Decompile on Decomfy.com'}</span>
-          </a>
+          <div style="display: flex; gap: 8px;">
+            <a href="${item.decomfySlug ? `https://decomfy.com/${encodeURIComponent(item.decomfySlug)}/` : (item.imageId ? `https://decomfy.com/resolve/?civitai=${encodeURIComponent(item.imageId)}` : 'https://decomfy.com/resolve/')}" target="_blank" rel="noopener noreferrer" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 10px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; color: #38bdf8; font-size: 11px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;">
+              ${ICONS.externalLink}
+              <span>${item.decomfySlug ? 'View Recipe' : 'Decompile'}</span>
+            </a>
+            <button type="button" id="ct-btn-share-decomfy-drawer" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 10px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: #f8fafc; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+              ${ICONS.share}
+              <span>Share via Decomfy</span>
+            </button>
+          </div>
         </div>
       `;
 
@@ -3084,6 +3299,9 @@
 
       const remixBtn = this.inspectorBody.querySelector('#ct-btn-remix');
       if (remixBtn) remixBtn.addEventListener('click', () => this.openRemix());
+
+      const drawerShareBtn = this.inspectorBody.querySelector('#ct-btn-share-decomfy-drawer');
+      if (drawerShareBtn) drawerShareBtn.addEventListener('click', () => this.shareViaDecomfy());
 
       this.bindCopyAction('#ct-copy-prompt', '#ct-prompt-text');
       this.bindCopyAction('#ct-copy-neg', '#ct-neg-text');
@@ -3191,7 +3409,7 @@
       item.metaFetching = true;
 
       try {
-        const res = await fetch(`https://civitai.com/api/v1/images?imageId=${encodeURIComponent(item.imageId)}`, {
+        const res = await fetch(`https://civitai.com/api/v1/images?imageId=${encodeURIComponent(item.imageId)}&nsfw=X`, {
           credentials: 'omit'
         });
         if (!res.ok) throw new Error('API failed');

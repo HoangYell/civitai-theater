@@ -1,10 +1,10 @@
 # Chrome Web Store Listing — Civitai Theater
 
-> **Current Status**: `Published & Live`  
+> **Current Status**: `Pending review (v2.2.0)` / `Published (v2.1.1 live)`  
 > **Item ID**: `ccfibckanaokflmicjfginfkadhgcnif`  
 > **Store URL**: `https://chromewebstore.google.com/detail/civitai-theater-fullscree/ccfibckanaokflmicjfginfkadhgcnif?pli=1`  
 > **Version**: `2.2.0`  
-> **Last Updated**: 2026-11-02
+> **Last Updated**: 2026-11-03
 
 ---
 
@@ -97,4 +97,5 @@ Civitai Theater is 100% client-side and open-source. It does NOT collect, track,
 ## Version History & Review Rectification
 
 - **v2.1.0** (2026-10-31): Rejected under Purple Potassium policy due to requesting but not actively using `storage` permission.
-- **v2.1.1** (2026-11-01): Rectified by completely removing the unused `storage` permission from `manifest.json`. Added `commands` shortcut (`Alt+Shift+S`) and updated prompt inspector with LoRA metadata extraction. Resubmitted for review (Status: `Pending review`).
+- **v2.1.1** (2026-11-01): Rectified by completely removing the unused `storage` permission from `manifest.json`. Added `commands` shortcut (`Alt+Shift+S`) and updated prompt inspector with LoRA metadata extraction. Approved and published to Chrome Web Store.
+- **v2.2.0** (2026-11-03): Package zip uploaded with Decomfy 1-click sharing integration (`Shift+C`), 5 high-resolution 1280x800 screenshots, 440x280 small promo tile, 1400x560 marquee promo tile, and updated full description. Submitted for review with auto-publish enabled (Status: `Pending review`). Verified via `store-assets/submission_pending_review_v2.2.0.png`.
